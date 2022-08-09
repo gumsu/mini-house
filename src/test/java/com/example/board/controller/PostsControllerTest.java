@@ -2,6 +2,7 @@ package com.example.board.controller;
 
 import com.example.board.domain.post.PostsService;
 import com.example.board.request.PostsSaveRequest;
+import com.example.board.response.PostsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -42,6 +44,7 @@ class PostsControllerTest {
                         .content(new ObjectMapper().writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().string("1"))
                 .andDo(print());
     }
 
@@ -53,6 +56,23 @@ class PostsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/{id} 를 get으로 요청 시 게시글을 한 개 조회한다.")
+    void findById() throws Exception {
+        // given
+        PostsSaveRequest request = new PostsSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostsResponse response = new PostsResponse(request.toEntity());
+
+        when(postsService.findOne(1L)).thenReturn(java.util.Optional.of(response));
+
+        mockMvc.perform(get("/api/v1/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        )
+                .andExpect(status().isOk())
+//                .andExpect(content().string(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(response)))
                 .andDo(print());
     }
 }
