@@ -38,4 +38,14 @@ public class PostsService {
         Posts posts = postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
         return Optional.of(new PostsResponse(posts));
     }
+
+    // 게시글 수정
+    public Long update(Long id, PostsSaveRequest request) {
+        Optional<Posts> post = postsRepository.findById(id);
+        post.get().update(
+                request.getTitle(),
+                request.getContent(),
+                request.getWriter());
+        return request.toEntity().getId();
+    }
 }

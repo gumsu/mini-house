@@ -34,4 +34,10 @@ public class PostsController {
     public Optional<PostsResponse> findById(@PathVariable Long id) {
         return postsService.findOne(id);
     }
+
+    // 수정
+    @PatchMapping("/{id}")
+    public Long save(@PathVariable Long id, @RequestBody PostsSaveRequest postsSaveRequest) {
+        return postsService.update(id, postsSaveRequest);
+    }
 }
