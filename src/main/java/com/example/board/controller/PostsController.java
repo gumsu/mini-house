@@ -37,7 +37,7 @@ public class PostsController {
 
     // 수정
     @PatchMapping("/{id}")
-    public Long save(@PathVariable Long id, @RequestBody PostsSaveRequest postsSaveRequest) {
+    public Long update(@PathVariable Long id, @RequestBody PostsSaveRequest postsSaveRequest) {
         return postsService.update(id, postsSaveRequest);
     }
 }
