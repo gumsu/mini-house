@@ -1,11 +1,15 @@
 package com.example.board.request;
 
 import com.example.board.domain.post.Posts;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PostsSaveRequest {
 
     private String title;
