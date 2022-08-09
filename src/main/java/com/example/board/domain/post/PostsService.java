@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,5 +31,11 @@ public class PostsService {
 //        }
 //        return responseList;
         return postsList.stream().map(PostsResponse::new).collect(Collectors.toList());
+    }
+
+    // 게시글 한 개 조회
+    public Optional<PostsResponse> findOne(Long id) {
+        Posts posts = postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        return Optional.of(new PostsResponse(posts));
     }
 }

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,5 +27,11 @@ public class PostsController {
     @GetMapping("/")
     public List<PostsResponse> listAll() {
         return postsService.listAll();
+    }
+
+    // 1개 조회
+    @GetMapping("/{id}")
+    public Optional<PostsResponse> findById(@PathVariable Long id) {
+        return postsService.findOne(id);
     }
 }
