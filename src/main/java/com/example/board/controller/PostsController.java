@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,8 @@ public class PostsController {
 
     // 등록
     @PostMapping("/posts")
-    public Long save(@RequestBody PostsSaveRequest postsSaveRequest) {
+    public Long save(@RequestBody @Valid PostsSaveRequest postsSaveRequest) {
+        log.info("params={}", postsSaveRequest.toString());
         return postsService.register(postsSaveRequest);
     }
 

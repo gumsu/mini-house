@@ -8,17 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +24,9 @@ import java.util.Map;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@WebMvcTest
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class PostsControllerTest {
@@ -44,9 +40,12 @@ class PostsControllerTest {
     @MockBean
     private PostsRepository postsRepository;
 
+    @Autowired
+    private WebApplicationContext wac;
+
     @BeforeEach
     void setup() {
-
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @Test
@@ -60,6 +59,7 @@ class PostsControllerTest {
         // expected
         mockMvc.perform(post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
 //                    .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\", \"writer\": \"작성자입니다\"}")
                         .content(new ObjectMapper().writeValueAsString(request))
                 )
@@ -76,6 +76,7 @@ class PostsControllerTest {
 
         mockMvc.perform(get("/api/v1/")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -92,6 +93,7 @@ class PostsControllerTest {
 
         mockMvc.perform(get("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
                         )
                 .andExpect(status().isOk())
 //                .andExpect(content().string(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(response)))
@@ -114,9 +116,28 @@ class PostsControllerTest {
         // then
         mockMvc.perform(patch("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
                         .content(new ObjectMapper().writeValueAsString(input))
                 )
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 등록 시 제목은 필수다.")
+    void verify() throws Exception {
+        PostsSaveRequest request = new PostsSaveRequest("", "내용입니다.", "작성자입니다");
+
+        mockMvc.perform(post("/api/v1/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(new ObjectMapper().writeValueAsString(request))
+                )
+//                .andExpect(jsonPath("$.title").value("제목을 입력해주세요."))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.title").value("제목을 입력해주세요."))
                 .andDo(print());
     }
 }
