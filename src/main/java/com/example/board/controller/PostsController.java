@@ -26,7 +26,7 @@ public class PostsController {
     }
 
     // 전체 조회
-    @GetMapping("/")
+    @GetMapping()
     public List<PostsResponse> listAll() {
         return postsService.listAll();
     }
