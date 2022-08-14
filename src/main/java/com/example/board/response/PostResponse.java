@@ -1,6 +1,6 @@
 package com.example.board.response;
 
-import com.example.board.domain.post.Posts;
+import com.example.board.domain.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
-public class PostsResponse {
+public class PostResponse {
     private Long id;
     private String title;
     private String content;
@@ -16,7 +16,7 @@ public class PostsResponse {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public PostsResponse(Posts entity) {
+    public PostResponse(Post entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();

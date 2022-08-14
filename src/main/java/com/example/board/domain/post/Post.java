@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@Entity
-public class Posts {
+@Entity(name = "Posts")
+public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +25,7 @@ public class Posts {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Posts(String title, String content, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Post(String title, String content, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.title = title;
         this.content = content;
         this.writer = writer;

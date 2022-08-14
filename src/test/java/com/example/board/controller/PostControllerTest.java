@@ -1,9 +1,9 @@
 package com.example.board.controller;
 
-import com.example.board.domain.post.PostsRepository;
-import com.example.board.domain.post.PostsService;
-import com.example.board.request.PostsSaveRequest;
-import com.example.board.response.PostsResponse;
+import com.example.board.domain.post.PostRepository;
+import com.example.board.domain.post.PostService;
+import com.example.board.request.PostSaveRequest;
+import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,16 +30,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest
 @SpringBootTest
 @AutoConfigureMockMvc
-class PostsControllerTest {
+class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PostsService postsService;
+    private PostService postService;
 
     @MockBean
-    private PostsRepository postsRepository;
+    private PostRepository postRepository;
 
     @Autowired
     private WebApplicationContext wac;
@@ -49,15 +50,15 @@ class PostsControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 를 post로 요청 시 게시글을 저장한다.")
+    @DisplayName("/post 를 post로 요청 시 게시글을 저장한다.")
     void save() throws Exception {
         // given
-        PostsSaveRequest request = new PostsSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
 
-        when(postsService.register(Mockito.any())).thenReturn(Long.valueOf(1));
+        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
 
-        // expected
-        mockMvc.perform(post("/api/v1/posts")
+        // when
+        mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
 //                    .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\", \"writer\": \"작성자입니다\"}")
@@ -66,13 +67,16 @@ class PostsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
                 .andDo(print());
+
+        //then
+//        assertEquals(1L, postRepository.count());
     }
 
     @Test
     @DisplayName("/ 를 get으로 요청 시 게시글을 전체 조회한다.")
     void listAll() throws Exception {
-        PostsSaveRequest request = new PostsSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
-        postsRepository.save(request.toEntity());
+        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        postRepository.save(request.toEntity());
 
         mockMvc.perform(get("/api/v1/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,10 +90,10 @@ class PostsControllerTest {
     @DisplayName("/{id} 를 get으로 요청 시 게시글을 한 개 조회한다.")
     void findById() throws Exception {
         // given
-        PostsSaveRequest request = new PostsSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
-        PostsResponse response = new PostsResponse(request.toEntity());
+        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostResponse response = new PostResponse(request.toEntity());
 
-        when(postsService.findOne(1L)).thenReturn(java.util.Optional.of(response));
+        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
 
         mockMvc.perform(get("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,8 +108,8 @@ class PostsControllerTest {
     @DisplayName("/{id} 를 patch로 요청 시 게시글을 수정한다.")
     void update() throws Exception {
         // given
-        PostsSaveRequest request = new PostsSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
-        postsRepository.save(request.toEntity());
+        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        postRepository.save(request.toEntity());
 
         // when
         Map<String, String> input = new HashMap<>();
@@ -126,9 +130,9 @@ class PostsControllerTest {
     @Test
     @DisplayName("게시글 등록 시 제목은 필수다.")
     void verify() throws Exception {
-        PostsSaveRequest request = new PostsSaveRequest("", "내용입니다.", "작성자입니다");
+        PostSaveRequest request = new PostSaveRequest("", "내용입니다.", "작성자입니다");
 
-        mockMvc.perform(post("/api/v1/posts")
+        mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(new ObjectMapper().writeValueAsString(request))

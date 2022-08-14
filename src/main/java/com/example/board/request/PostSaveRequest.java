@@ -1,6 +1,6 @@
 package com.example.board.request;
 
-import com.example.board.domain.post.Posts;
+import com.example.board.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PostsSaveRequest {
+public class PostSaveRequest {
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
@@ -22,8 +22,8 @@ public class PostsSaveRequest {
     @NotBlank(message = "작성자를 입력해주세요.")
     private String writer;
 
-    public Posts toEntity() {
-        return Posts.builder()
+    public Post toEntity() {
+        return Post.builder()
                 .title(title)
                 .content(content)
                 .writer(writer)
