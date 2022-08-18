@@ -35,6 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest {
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mockMvc;
 
 //    @Autowired
@@ -60,7 +63,11 @@ class PostControllerTest {
     @DisplayName("/post 를 post로 요청 시 게시글을 저장한다.")
     void save() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
 
 //        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
 
@@ -68,8 +75,7 @@ class PostControllerTest {
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-//                    .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\", \"writer\": \"작성자입니다\"}")
-                        .content(new ObjectMapper().writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
@@ -81,7 +87,13 @@ class PostControllerTest {
     @Test
     @DisplayName("/ 를 get으로 요청 시 게시글을 전체 조회한다.")
     void listAll() throws Exception {
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        // given
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
+
         postRepository.save(request.toEntity());
 
         mockMvc.perform(get("/api/v1/")
@@ -96,7 +108,12 @@ class PostControllerTest {
     @DisplayName("/{id} 를 get으로 요청 시 게시글을 한 개 조회한다.")
     void findById() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
+
         PostResponse response = new PostResponse(request.toEntity());
 
 //        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
@@ -114,7 +131,12 @@ class PostControllerTest {
     @DisplayName("/{id} 를 patch로 요청 시 게시글을 수정한다.")
     void update() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
+
         postRepository.save(request.toEntity());
 
         // when
@@ -136,7 +158,12 @@ class PostControllerTest {
     @Test
     @DisplayName("게시글 등록 시 제목은 필수다.")
     void verify() throws Exception {
-        PostSaveRequest request = new PostSaveRequest("", "내용입니다.", "작성자입니다");
+        // given
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
 
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
