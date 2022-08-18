@@ -1,10 +1,12 @@
 package com.example.board.controller;
 
+import com.example.board.domain.post.Post;
 import com.example.board.domain.post.PostRepository;
 import com.example.board.domain.post.PostService;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,15 +90,21 @@ class PostControllerTest {
     @DisplayName("/ 를 get으로 요청 시 게시글을 전체 조회한다.")
     void listAll() throws Exception {
         // given
-        PostSaveRequest request = PostSaveRequest.builder()
+        PostSaveRequest request1 = PostSaveRequest.builder()
                 .title("제목입니다.")
                 .content("내용입니다")
                 .writer("작성자입니다")
                 .build();
+        PostSaveRequest request2 = PostSaveRequest.builder()
+                .title("제목2.")
+                .content("내용2")
+                .writer("작성자입니다")
+                .build();
 
-        postRepository.save(request.toEntity());
+        postRepository.save(request1.toEntity());
+        postRepository.save(request2.toEntity());
 
-        mockMvc.perform(get("/api/v1/")
+        mockMvc.perform(get("/api/v1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                 )
@@ -114,16 +122,15 @@ class PostControllerTest {
                 .writer("작성자입니다")
                 .build();
 
-        PostResponse response = new PostResponse(request.toEntity());
-
-//        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
+        Post post = postRepository.save(request.toEntity());
+        PostResponse response = new PostResponse(post);
 
         mockMvc.perform(get("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         )
                 .andExpect(status().isOk())
-//                .andExpect(content().string(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(response)))
+                .andExpect(content().string(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(response)))
                 .andDo(print());
     }
 
@@ -149,9 +156,10 @@ class PostControllerTest {
         mockMvc.perform(patch("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new ObjectMapper().writeValueAsString(input))
+                        .content(objectMapper.writeValueAsString(input))
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().string("1"))
                 .andDo(print());
     }
 
@@ -168,7 +176,7 @@ class PostControllerTest {
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new ObjectMapper().writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(request))
                 )
 //                .andExpect(jsonPath("$.title").value("제목을 입력해주세요."))
                 .andExpect(status().isBadRequest())
