@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@WebMvcTest
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class PostControllerTest {
@@ -35,19 +37,24 @@ class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private PostService postService;
-
-    @MockBean
-    private PostRepository postRepository;
+//    @Autowired
+//    private PostService postService;
 
     @Autowired
-    private WebApplicationContext wac;
+    private PostRepository postRepository;
 
     @BeforeEach
-    void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    void clean() {
+        postRepository.deleteAll();
     }
+
+//    @Autowired
+//    private WebApplicationContext wac;
+
+//    @BeforeEach
+//    void setup() {
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+//    }
 
     @Test
     @DisplayName("/post 를 post로 요청 시 게시글을 저장한다.")
@@ -55,7 +62,7 @@ class PostControllerTest {
         // given
         PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
 
-        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
+//        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
 
         // when
         mockMvc.perform(post("/api/v1/post")
@@ -67,7 +74,6 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
                 .andDo(print());
-
         //then
 //        assertEquals(1L, postRepository.count());
     }
@@ -93,7 +99,7 @@ class PostControllerTest {
         PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
         PostResponse response = new PostResponse(request.toEntity());
 
-        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
+//        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
 
         mockMvc.perform(get("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
