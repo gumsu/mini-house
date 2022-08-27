@@ -7,6 +7,7 @@ import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,6 +105,7 @@ class PostControllerTest {
         postRepository.save(request1.toEntity());
         postRepository.save(request2.toEntity());
 
+        // expected
         mockMvc.perform(get("/api/v1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
@@ -125,13 +127,15 @@ class PostControllerTest {
         Post post = postRepository.save(request.toEntity());
         PostResponse response = new PostResponse(post);
 
-        mockMvc.perform(get("/api/v1/1")
+        // expected
+        mockMvc.perform(get("/api/v1/{postId}", response.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(response)))
                 .andDo(print());
+
     }
 
     @Test
@@ -161,6 +165,8 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
                 .andDo(print());
+
+//        Assertions.assertThat(postRepository.count()).isEqualTo(1);
     }
 
     @Test
@@ -173,6 +179,7 @@ class PostControllerTest {
                 .writer("작성자입니다")
                 .build();
 
+        // expected
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
