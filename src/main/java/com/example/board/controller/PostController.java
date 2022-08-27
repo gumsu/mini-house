@@ -28,7 +28,7 @@ public class PostController {
     // 전체 조회
     @GetMapping()
     public List<PostResponse> listAll() {
-        return postService.listAll();
+        return postService.getList(0);
     }
 
     // 1개 조회
