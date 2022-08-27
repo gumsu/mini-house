@@ -1,10 +1,13 @@
 package com.example.board.controller;
 
+import com.example.board.domain.post.Post;
 import com.example.board.domain.post.PostRepository;
 import com.example.board.domain.post.PostService;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest {
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mockMvc;
 
 //    @Autowired
@@ -60,7 +66,11 @@ class PostControllerTest {
     @DisplayName("/post 를 post로 요청 시 게시글을 저장한다.")
     void save() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
 
 //        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
 
@@ -68,8 +78,7 @@ class PostControllerTest {
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-//                    .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\", \"writer\": \"작성자입니다\"}")
-                        .content(new ObjectMapper().writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))
@@ -81,10 +90,23 @@ class PostControllerTest {
     @Test
     @DisplayName("/ 를 get으로 요청 시 게시글을 전체 조회한다.")
     void listAll() throws Exception {
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
-        postRepository.save(request.toEntity());
+        // given
+        PostSaveRequest request1 = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
+        PostSaveRequest request2 = PostSaveRequest.builder()
+                .title("제목2.")
+                .content("내용2")
+                .writer("작성자입니다")
+                .build();
 
-        mockMvc.perform(get("/api/v1/")
+        postRepository.save(request1.toEntity());
+        postRepository.save(request2.toEntity());
+
+        // expected
+        mockMvc.perform(get("/api/v1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                 )
@@ -96,25 +118,36 @@ class PostControllerTest {
     @DisplayName("/{id} 를 get으로 요청 시 게시글을 한 개 조회한다.")
     void findById() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
-        PostResponse response = new PostResponse(request.toEntity());
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
 
-//        when(postService.findOne(1L)).thenReturn(java.util.Optional.of(response));
+        Post post = postRepository.save(request.toEntity());
+        PostResponse response = new PostResponse(post);
 
-        mockMvc.perform(get("/api/v1/1")
+        // expected
+        mockMvc.perform(get("/api/v1/{postId}", response.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         )
                 .andExpect(status().isOk())
-//                .andExpect(content().string(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(response)))
+                .andExpect(content().string(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(response)))
                 .andDo(print());
+
     }
 
     @Test
     @DisplayName("/{id} 를 patch로 요청 시 게시글을 수정한다.")
     void update() throws Exception {
         // given
-        PostSaveRequest request = new PostSaveRequest("제목입니다.", "내용입니다", "작성자입니다");
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("제목입니다.")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
+
         postRepository.save(request.toEntity());
 
         // when
@@ -127,21 +160,30 @@ class PostControllerTest {
         mockMvc.perform(patch("/api/v1/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new ObjectMapper().writeValueAsString(input))
+                        .content(objectMapper.writeValueAsString(input))
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().string("1"))
                 .andDo(print());
+
+//        Assertions.assertThat(postRepository.count()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("게시글 등록 시 제목은 필수다.")
     void verify() throws Exception {
-        PostSaveRequest request = new PostSaveRequest("", "내용입니다.", "작성자입니다");
+        // given
+        PostSaveRequest request = PostSaveRequest.builder()
+                .title("")
+                .content("내용입니다")
+                .writer("작성자입니다")
+                .build();
 
+        // expected
         mockMvc.perform(post("/api/v1/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(new ObjectMapper().writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(request))
                 )
 //                .andExpect(jsonPath("$.title").value("제목을 입력해주세요."))
                 .andExpect(status().isBadRequest())
