@@ -5,6 +5,8 @@ import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,8 +29,8 @@ public class PostController {
 
     // 전체 조회
     @GetMapping()
-    public List<PostResponse> listAll() {
-        return postService.getList(0);
+    public List<PostResponse> getList(@PageableDefault Pageable pageable) {
+        return postService.getList(pageable);
     }
 
     // 1개 조회
