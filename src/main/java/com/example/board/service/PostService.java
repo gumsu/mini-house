@@ -27,7 +27,7 @@ public class PostService {
 
     // 게시글 여러 개 조회
     public List<PostResponse> getList(Pageable page) {
-        return postRepository.findAll(page).stream()
+        return postRepository.getList(1).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
