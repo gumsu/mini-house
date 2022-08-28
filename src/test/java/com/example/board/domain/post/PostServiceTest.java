@@ -1,7 +1,9 @@
 package com.example.board.domain.post;
 
+import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
+import com.example.board.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

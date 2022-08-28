@@ -1,11 +1,11 @@
-package com.example.board.domain.post;
+package com.example.board.service;
 
+import com.example.board.domain.post.Post;
+import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

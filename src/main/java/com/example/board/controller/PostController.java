@@ -1,6 +1,6 @@
 package com.example.board.controller;
 
-import com.example.board.domain.post.PostService;
+import com.example.board.service.PostService;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
