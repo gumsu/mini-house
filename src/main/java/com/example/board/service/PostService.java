@@ -3,6 +3,7 @@ package com.example.board.service;
 import com.example.board.domain.post.Post;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostSearchRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +27,8 @@ public class PostService {
     }
 
     // 게시글 여러 개 조회
-    public List<PostResponse> getList(Pageable page) {
-        return postRepository.getList(1).stream()
+    public List<PostResponse> getList(PostSearchRequest request) {
+        return postRepository.getList(request).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }

@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import com.example.board.request.PostSearchRequest;
 import com.example.board.service.PostService;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
@@ -29,8 +30,8 @@ public class PostController {
 
     // 전체 조회
     @GetMapping()
-    public List<PostResponse> getList(@PageableDefault Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearchRequest postSearchRequest) {
+        return postService.getList(postSearchRequest);
     }
 
     // 1개 조회

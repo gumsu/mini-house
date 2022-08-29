@@ -3,6 +3,7 @@ package com.example.board.service;
 import com.example.board.domain.post.Post;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostSearchRequest;
 import com.example.board.response.PostResponse;
 import com.example.board.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,9 +69,13 @@ class PostServiceTest {
                 .collect(Collectors.toList());
         postRepository.saveAll(request);
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
+        PostSearchRequest postSearchRequest = PostSearchRequest.builder()
+                .page(1)
+                .size(5)
+                .build();
+
         // when
-        List<PostResponse> posts = postService.getList(pageable);
+        List<PostResponse> posts = postService.getList(postSearchRequest);
 
         // then
         assertThat(posts.size()).isEqualTo(5);
