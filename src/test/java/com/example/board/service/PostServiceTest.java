@@ -71,7 +71,6 @@ class PostServiceTest {
 
         PostSearchRequest postSearchRequest = PostSearchRequest.builder()
                 .page(1)
-                .size(5)
                 .build();
 
         // when

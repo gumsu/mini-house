@@ -6,14 +6,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class PostSearchRequest {
 
-    private int page;
-    private int size;
+    @Builder.Default
+    private Integer page = 1;
+    @Builder.Default
+    private Integer size = 5;
 
-    @Builder
-    public PostSearchRequest(int page, int size) {
-        this.page = page;
-        this.size = size;
-    }
 }

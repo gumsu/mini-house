@@ -6,6 +6,7 @@ import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -99,11 +101,13 @@ class PostControllerTest {
         postRepository.saveAll(request);
 
         // expected
-        mockMvc.perform(get("/api/v1?page=1&sort=id,desc&size=5")
+        mockMvc.perform(get("/api/v1?page=1&size=5")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                 )
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$[0].title").value("제목 29"))
                 .andDo(print());
     }
 
