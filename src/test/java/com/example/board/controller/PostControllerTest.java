@@ -189,4 +189,30 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.validation.title").value("제목을 입력해주세요."))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("/ 를 get으로 요청할 때 페이지를 0으로 하면 첫 페이지를 가져온다.")
+    void zeroPage() throws Exception {
+        // given
+        List<Post> request = IntStream.range(0, 30)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("제목 " + i)
+                            .content("내용 " + i)
+                            .writer("작성자 "+ i)
+                            .build(  );
+                })
+                .collect(Collectors.toList());
+        postRepository.saveAll(request);
+
+        // expected
+        mockMvc.perform(get("/api/v1?page=0&size=5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$[0].title").value("제목 29"))
+                .andDo(print());
+    }
 }
