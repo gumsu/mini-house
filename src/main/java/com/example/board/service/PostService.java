@@ -4,6 +4,7 @@ import com.example.board.domain.post.Post;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.request.PostSearchRequest;
+import com.example.board.request.PostUpdateRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -40,12 +41,9 @@ public class PostService {
     }
 
     // 게시글 수정
-    public Long update(Long id, PostSaveRequest request) {
-        Optional<Post> post = postRepository.findById(id);
-        post.get().update(
-                request.getTitle(),
-                request.getContent(),
-                request.getWriter());
-        return request.toEntity().getId();
+    public Long update(Long id, PostUpdateRequest request) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        post.update(request.getTitle(), request.getContent(), request.getWriter());
+        return post.getId();
     }
 }

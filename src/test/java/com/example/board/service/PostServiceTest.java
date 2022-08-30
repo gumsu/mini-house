@@ -4,8 +4,10 @@ import com.example.board.domain.post.Post;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.request.PostSearchRequest;
+import com.example.board.request.PostUpdateRequest;
 import com.example.board.response.PostResponse;
 import com.example.board.service.PostService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,13 +106,26 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글을 수정 한다.")
+    @DisplayName("게시글 제목을 수정 한다.")
     void update() {
         // given
+        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
+                .title("제목입니다")
+                .content("내용입니다")
+                .writer("작성자1")
+                .build();
 
+        Post post = postRepository.save(postSaveRequest.toEntity());
+
+        PostUpdateRequest postUpdateRequest = PostUpdateRequest.builder()
+                .title("바꾼 제목이에요")
+                .build();
         // when
+        postService.update(post.getId(), postUpdateRequest);
 
         // then
-
+        Post updatePost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 글입니다. + id" + post.getId()));
+        assertThat(updatePost.getTitle()).isEqualTo("바꾼 제목이에요");
+//        assertThat(updatePost.getContent()).isEqualTo("내용입니다");
     }
 }
