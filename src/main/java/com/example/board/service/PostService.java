@@ -44,8 +44,8 @@ public class PostService {
     // 게시글 수정
     public Long update(Long id, PostUpdateRequest request) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
-        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
-        PostEditor postEditor = editorBuilder
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor(); // 기존 데이터
+        PostEditor postEditor = editorBuilder // 새로운 데이터
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();

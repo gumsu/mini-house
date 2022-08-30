@@ -119,6 +119,8 @@ class PostServiceTest {
 
         PostUpdateRequest postUpdateRequest = PostUpdateRequest.builder()
                 .title("바꾼 제목이에요")
+                .content("내용입니다")
+                .writer("작성자1")
                 .build();
         // when
         postService.update(post.getId(), postUpdateRequest);
@@ -126,6 +128,6 @@ class PostServiceTest {
         // then
         Post updatePost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 글입니다. + id" + post.getId()));
         assertThat(updatePost.getTitle()).isEqualTo("바꾼 제목이에요");
-//        assertThat(updatePost.getContent()).isEqualTo("내용입니다");
+        assertThat(updatePost.getContent()).isEqualTo("내용입니다");
     }
 }

@@ -31,12 +31,14 @@ public class Post {
         this.modifiedDate = modifiedDate;
     }
 
+    // 기존 데이터로 build
     public PostEditor.PostEditorBuilder toEditor() {
         return PostEditor.builder()
                 .title(title)
                 .content(content);
     }
 
+    // 새로 변경된 데이터로 수정
     public void toEdit(PostEditor postEditor) {
         title = postEditor.getTitle();
         content = postEditor.getContent();
