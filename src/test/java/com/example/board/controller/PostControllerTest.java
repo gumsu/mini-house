@@ -3,6 +3,7 @@ package com.example.board.controller;
 import com.example.board.domain.post.Post;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostUpdateRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -139,25 +140,26 @@ class PostControllerTest {
     @DisplayName("/{id} 를 patch로 요청 시 게시글을 수정한다.")
     void update() throws Exception {
         // given
-        PostSaveRequest request = PostSaveRequest.builder()
+        PostSaveRequest data = PostSaveRequest.builder()
                 .title("제목입니다.")
                 .content("내용입니다")
                 .writer("작성자입니다")
                 .build();
 
-        postRepository.save(request.toEntity());
+        Post post = postRepository.save(data.toEntity());
 
         // when
-        Map<String, String> input = new HashMap<>();
-        input.put("title","변경한제목");
-        input.put("content", "변경한내용");
-        input.put("writer", "작성자입니다.");
+        PostUpdateRequest request = PostUpdateRequest.builder()
+                .title("변경한 제목")
+                .content("변경한 내용")
+                .writer("작성자") // 작성자입니다
+                .build();
 
         // then
-        mockMvc.perform(patch("/api/v1/1")
+        mockMvc.perform(patch("/api/v1/{id}", post.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(objectMapper.writeValueAsString(input))
+                        .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"))

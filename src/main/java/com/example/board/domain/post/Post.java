@@ -31,10 +31,17 @@ public class Post {
         this.modifiedDate = modifiedDate;
     }
 
-    public void update(String title, String content, String writer) {
-        this.title = title;
-        this.content = content;
-        this.writer = writer;
-        this.modifiedDate = LocalDateTime.now();
+    // 기존 데이터로 build
+    public PostEditor.PostEditorBuilder toEditor() {
+        return PostEditor.builder()
+                .title(title)
+                .content(content);
+    }
+
+    // 새로 변경된 데이터로 수정
+    public void toEdit(PostEditor postEditor) {
+        title = postEditor.getTitle();
+        content = postEditor.getContent();
+        modifiedDate = LocalDateTime.now();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.request.PostSearchRequest;
+import com.example.board.request.PostUpdateRequest;
 import com.example.board.service.PostService;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
@@ -42,7 +43,7 @@ public class PostController {
 
     // 수정
     @PatchMapping("/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostSaveRequest postSaveRequest) {
-        return postService.update(id, postSaveRequest);
+    public Long update(@PathVariable Long id, @RequestBody @Valid PostUpdateRequest postUpdateRequest) {
+        return postService.update(id, postUpdateRequest);
     }
 }
