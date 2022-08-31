@@ -52,4 +52,9 @@ public class PostService {
         post.toEdit(postEditor);
         return post.getId();
     }
+
+    public void delete(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        postRepository.delete(post);
+    }
 }

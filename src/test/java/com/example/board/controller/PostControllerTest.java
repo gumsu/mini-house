@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -211,10 +212,31 @@ class PostControllerTest {
         mockMvc.perform(get("/api/v1?page=0&size=5")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
-        )
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(5)))
                 .andExpect(jsonPath("$[0].title").value("제목 29"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/{id}를 delete로 요청 시 게시글을 삭제한다.")
+    void delete() throws Exception {
+        // given
+        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
+                .title("게시글제목")
+                .content("내용임")
+                .writer("작성자1")
+                .build();
+
+        Post post = postRepository.save(postSaveRequest.toEntity());
+
+        // expected
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/{id}", post.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                )
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

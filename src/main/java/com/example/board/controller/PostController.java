@@ -46,4 +46,10 @@ public class PostController {
     public Long update(@PathVariable Long id, @RequestBody @Valid PostUpdateRequest postUpdateRequest) {
         return postService.update(id, postUpdateRequest);
     }
+
+    // 삭제
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        postService.delete(id);
+    }
 }
