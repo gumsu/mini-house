@@ -1,8 +1,12 @@
-package com.example.board.domain.post;
+package com.example.board.service;
 
+import com.example.board.domain.post.Post;
+import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostSearchRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +26,11 @@ public class PostService {
         return postRepository.save(request.toEntity()).getId();
     }
 
-    // 게시글 전체 조회
-    public List<PostResponse> listAll() {
-        List<Post> postList = postRepository.findAll();
-
-//        List<PostsResponse> responseList = new ArrayList<>();
-//        for (Posts posts : postsList) {
-//            responseList.add(new PostsResponse(posts));
-//        }
-//        return responseList;
-        return postList.stream().map(PostResponse::new).collect(Collectors.toList());
+    // 게시글 여러 개 조회
+    public List<PostResponse> getList(PostSearchRequest request) {
+        return postRepository.getList(request).stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
     }
 
     // 게시글 한 개 조회

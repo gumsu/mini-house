@@ -1,32 +1,30 @@
 package com.example.board.controller;
 
 import com.example.board.domain.post.Post;
-import com.example.board.domain.post.PostRepository;
-import com.example.board.domain.post.PostService;
+import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.assertj.core.api.Assertions;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -88,29 +86,28 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/ 를 get으로 요청 시 게시글을 전체 조회한다.")
-    void listAll() throws Exception {
+    @DisplayName("/ 를 get으로 요청 시 게시글을 여러 개 조회한다.")
+    void getList() throws Exception {
         // given
-        PostSaveRequest request1 = PostSaveRequest.builder()
-                .title("제목입니다.")
-                .content("내용입니다")
-                .writer("작성자입니다")
-                .build();
-        PostSaveRequest request2 = PostSaveRequest.builder()
-                .title("제목2.")
-                .content("내용2")
-                .writer("작성자입니다")
-                .build();
-
-        postRepository.save(request1.toEntity());
-        postRepository.save(request2.toEntity());
+        List<Post> request = IntStream.range(0, 30)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("제목 " + i)
+                            .content("내용 " + i)
+                            .writer("작성자 "+ i)
+                            .build(  );
+                })
+                .collect(Collectors.toList());
+        postRepository.saveAll(request);
 
         // expected
-        mockMvc.perform(get("/api/v1")
+        mockMvc.perform(get("/api/v1?page=1&size=5")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                 )
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$[0].title").value("제목 29"))
                 .andDo(print());
     }
 
@@ -190,6 +187,32 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validation.title").value("제목을 입력해주세요."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/ 를 get으로 요청할 때 페이지를 0으로 하면 첫 페이지를 가져온다.")
+    void zeroPage() throws Exception {
+        // given
+        List<Post> request = IntStream.range(0, 30)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("제목 " + i)
+                            .content("내용 " + i)
+                            .writer("작성자 "+ i)
+                            .build(  );
+                })
+                .collect(Collectors.toList());
+        postRepository.saveAll(request);
+
+        // expected
+        mockMvc.perform(get("/api/v1?page=0&size=5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$[0].title").value("제목 29"))
                 .andDo(print());
     }
 }
