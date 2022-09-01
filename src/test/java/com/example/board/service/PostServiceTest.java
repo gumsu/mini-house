@@ -1,6 +1,7 @@
 package com.example.board.service;
 
 import com.example.board.domain.post.Post;
+import com.example.board.exception.PostNotFound;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.request.PostSearchRequest;
@@ -164,14 +165,8 @@ class PostServiceTest {
         Post post = postRepository.save(postSaveRequest.toEntity());
 
         // expected
-//        assertThatThrownBy(() -> {
-//            postService.findOne(post.getId()+1L);
-//        }).isInstanceOf(IllegalArgumentException.class);
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(PostNotFound.class, () -> {
             postService.findOne(post.getId() + 1L);
         });
-
-        assertThat(exception.getMessage()).isEqualTo("게시물이 존재하지 않습니다.");
     }
 }
