@@ -239,4 +239,15 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글을 조회하면 오류가 발생한다.")
+    void notFoundPost() throws Exception {
+        mockMvc.perform(get("/api/v1/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
