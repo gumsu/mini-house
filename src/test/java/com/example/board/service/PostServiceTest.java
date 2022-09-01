@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class PostServiceTest {
@@ -147,5 +149,29 @@ class PostServiceTest {
 
         // then
         assertThat(postRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글을 조회하면 오류가 발생한다.")
+    void notFoundPost() {
+        // given
+        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
+                .title("제목이에요")
+                .content("내용이에요")
+                .writer("작성자1")
+                .build();
+
+        Post post = postRepository.save(postSaveRequest.toEntity());
+
+        // expected
+//        assertThatThrownBy(() -> {
+//            postService.findOne(post.getId()+1L);
+//        }).isInstanceOf(IllegalArgumentException.class);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            postService.findOne(post.getId() + 1L);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("게시물이 존재하지 않습니다.");
     }
 }
