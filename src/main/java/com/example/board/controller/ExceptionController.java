@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import com.example.board.exception.InvalidRequest;
 import com.example.board.exception.PostNotFound;
 import com.example.board.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,17 @@ public class ExceptionController {
     public ErrorResponse postNotFound(PostNotFound e) {
         ErrorResponse response = ErrorResponse.builder()
                 .code("404")
+                .message(e.getMessage())
+                .build();
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidRequest.class)
+    @ResponseBody
+    public ErrorResponse invalidRequest(InvalidRequest e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
                 .message(e.getMessage())
                 .build();
         return response;

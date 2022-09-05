@@ -250,4 +250,22 @@ class PostControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("게시글 등록 시 바보는 포함될 수 없다.")
+    void invalidRequest() throws Exception {
+        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
+                .title("바보")
+                .content("내용")
+                .writer("작성자")
+                .build();
+
+        mockMvc.perform(post("/api/v1/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(objectMapper.writeValueAsString(postSaveRequest))
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
