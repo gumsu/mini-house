@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import com.example.board.exception.InvalidRequest;
 import com.example.board.request.PostSearchRequest;
 import com.example.board.request.PostUpdateRequest;
 import com.example.board.service.PostService;
@@ -25,7 +26,7 @@ public class PostController {
     // 등록
     @PostMapping("/post")
     public Long save(@RequestBody @Valid PostSaveRequest postSaveRequest) {
-        log.info("params={}", postSaveRequest.toString());
+        postSaveRequest.validate();
         return postService.register(postSaveRequest);
     }
 

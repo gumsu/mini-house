@@ -2,6 +2,7 @@ package com.example.board.service;
 
 import com.example.board.domain.post.Post;
 import com.example.board.domain.post.PostEditor;
+import com.example.board.exception.PostNotFound;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostSaveRequest;
 import com.example.board.request.PostSearchRequest;
@@ -37,13 +38,13 @@ public class PostService {
 
     // 게시글 한 개 조회
     public Optional<PostResponse> findOne(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
         return Optional.of(new PostResponse(post));
     }
 
     // 게시글 수정
     public Long update(Long id, PostUpdateRequest request) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
         PostEditor.PostEditorBuilder editorBuilder = post.toEditor(); // 기존 데이터
         PostEditor postEditor = editorBuilder // 새로운 데이터
                 .title(request.getTitle())
@@ -54,7 +55,7 @@ public class PostService {
     }
 
     public void delete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("게시물이 존재하지 않습니다."));
+        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
         postRepository.delete(post);
     }
 }

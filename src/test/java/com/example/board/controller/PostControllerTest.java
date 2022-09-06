@@ -239,4 +239,33 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글을 조회하면 오류가 발생한다.")
+    void notFoundPost() throws Exception {
+        mockMvc.perform(get("/api/v1/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 등록 시 바보는 포함될 수 없다.")
+    void invalidRequest() throws Exception {
+        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
+                .title("바보")
+                .content("내용")
+                .writer("작성자")
+                .build();
+
+        mockMvc.perform(post("/api/v1/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(objectMapper.writeValueAsString(postSaveRequest))
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
