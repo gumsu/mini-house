@@ -1,6 +1,7 @@
 package com.example.board.request;
 
 import com.example.board.domain.post.Post;
+import com.example.board.exception.InvalidRequest;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -33,5 +34,11 @@ public class PostSaveRequest {
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(null)
                 .build();
+    }
+
+    public void validate() {
+        if(title.contains("바보")){
+            throw new InvalidRequest("title", "제목에 바보를 포함할 수 없습니다.");
+        }
     }
 }

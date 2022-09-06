@@ -26,10 +26,7 @@ public class PostController {
     // 등록
     @PostMapping("/post")
     public Long save(@RequestBody @Valid PostSaveRequest postSaveRequest) {
-        log.info("params={}", postSaveRequest.toString());
-        if(postSaveRequest.getTitle().contains("바보")){
-            throw new InvalidRequest();
-        }
+        postSaveRequest.validate();
         return postService.register(postSaveRequest);
     }
 

@@ -1,10 +1,12 @@
 package com.example.board.controller;
 
+import com.example.board.exception.BaseException;
 import com.example.board.exception.InvalidRequest;
 import com.example.board.exception.PostNotFound;
 import com.example.board.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,25 +33,20 @@ public class ExceptionController {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PostNotFound.class)
+    @ExceptionHandler(BaseException.class)
     @ResponseBody
-    public ErrorResponse postNotFound(PostNotFound e) {
-        ErrorResponse response = ErrorResponse.builder()
-                .code("404")
+    public ResponseEntity<ErrorResponse> baseException(BaseException e) {
+        int statusCode = e.getStatusCode();
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
                 .message(e.getMessage())
+                .validation(e.getValidation())
                 .build();
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
+
         return response;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidRequest.class)
-    @ResponseBody
-    public ErrorResponse invalidRequest(InvalidRequest e) {
-        ErrorResponse response = ErrorResponse.builder()
-                .code("400")
-                .message(e.getMessage())
-                .build();
-        return response;
-    }
 }
