@@ -1,6 +1,8 @@
 package com.example.board.controller;
 
 import com.example.board.request.MemberSaveRequest;
+import com.example.board.request.SignInRequest;
+import com.example.board.response.SignInResponse;
 import com.example.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,4 +23,8 @@ public class MemberController {
         return memberService.register(memberSaveRequest);
     }
 
+    @PostMapping("/signin")
+    public SignInResponse signIn(@RequestBody SignInRequest signInRequest) {
+        return memberService.signIn(signInRequest);
+    }
 }
