@@ -1,7 +1,7 @@
 package com.example.board.controller;
 
-import com.example.board.request.MemberSaveRequest;
-import com.example.board.service.MemberService;
+import com.example.board.request.SignUpRequest;
+import com.example.board.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MemberControllerTest {
+class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
-    private MemberService memberService;
+    private UserService userService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,7 +32,7 @@ class MemberControllerTest {
     @DisplayName("/member 를 post로 요청 시 회원가입 할 수 있다.")
     void save() throws Exception {
         // given
-        MemberSaveRequest request = MemberSaveRequest.builder()
+        SignUpRequest request = SignUpRequest.builder()
                 .name("이름")
                 .email("abcd@naver.com")
                 .password("1234")

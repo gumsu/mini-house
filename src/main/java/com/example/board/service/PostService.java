@@ -4,12 +4,11 @@ import com.example.board.domain.post.Post;
 import com.example.board.domain.post.PostEditor;
 import com.example.board.exception.PostNotFound;
 import com.example.board.repository.PostRepository;
-import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostCreateRequest;
 import com.example.board.request.PostSearchRequest;
 import com.example.board.request.PostUpdateRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +24,12 @@ public class PostService {
     private final PostRepository postRepository;
 
     // 게시글 등록
-    public Long register(PostSaveRequest request) {
+    public Long create(PostCreateRequest request) {
         return postRepository.save(request.toEntity()).getId();
     }
 
     // 게시글 여러 개 조회
-    public List<PostResponse> getList(PostSearchRequest request) {
+    public List<PostResponse> getAll(PostSearchRequest request) {
         return postRepository.getList(request).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package com.example.board.domain.member;
+package com.example.board.domain.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,11 +14,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table(name = "Members")
+@Table(name = "users")
 @Getter
 @RequiredArgsConstructor
 @Entity
-public class Member implements UserDetails {
+public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,13 +32,13 @@ public class Member implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String name, String email, String password, LocalDateTime createdAt) {
+    public User(Long id, String name, String email, String password, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
-        this.roles.add("ROLE_MEMBER");
+        this.roles.add("ROLE_USER");
     }
 
     @Override

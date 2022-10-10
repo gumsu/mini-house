@@ -1,9 +1,9 @@
 package com.example.board.controller;
 
-import com.example.board.request.MemberSaveRequest;
+import com.example.board.request.SignUpRequest;
 import com.example.board.request.SignInRequest;
 import com.example.board.response.SignInResponse;
-import com.example.board.service.MemberService;
+import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/user")
 @RestController
-public class MemberController {
-    private final MemberService memberService;
+public class UserController {
+    private final UserService userService;
 
     @PostMapping()
-    public Long save(@RequestBody MemberSaveRequest memberSaveRequest) {
-        return memberService.register(memberSaveRequest);
+    public Long signUp(@RequestBody SignUpRequest signUpRequest) {
+        return userService.signUp(signUpRequest);
     }
 
     @PostMapping("/signin")
     public SignInResponse signIn(@RequestBody SignInRequest signInRequest) {
-        return memberService.signIn(signInRequest);
+        return userService.signIn(signInRequest);
     }
 }

@@ -1,15 +1,12 @@
 package com.example.board.controller;
 
-import com.example.board.exception.InvalidRequest;
 import com.example.board.request.PostSearchRequest;
 import com.example.board.request.PostUpdateRequest;
 import com.example.board.service.PostService;
-import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostCreateRequest;
 import com.example.board.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,15 +22,15 @@ public class PostController {
 
     // 등록
     @PostMapping("/post")
-    public Long save(@RequestBody @Valid PostSaveRequest postSaveRequest) {
-        postSaveRequest.validate();
-        return postService.register(postSaveRequest);
+    public Long create(@RequestBody @Valid PostCreateRequest postCreateRequest) {
+        postCreateRequest.validate();
+        return postService.create(postCreateRequest);
     }
 
     // 전체 조회
     @GetMapping()
-    public List<PostResponse> getList(@ModelAttribute PostSearchRequest postSearchRequest) {
-        return postService.getList(postSearchRequest);
+    public List<PostResponse> getAll(@ModelAttribute PostSearchRequest postSearchRequest) {
+        return postService.getAll(postSearchRequest);
     }
 
     // 1개 조회

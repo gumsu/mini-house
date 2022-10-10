@@ -1,6 +1,6 @@
 package com.example.board.request;
 
-import com.example.board.domain.member.Member;
+import com.example.board.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,21 +9,21 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
-public class MemberSaveRequest {
+public class SignUpRequest {
 
     private String name;
     private String email;
     private String password;
 
     @Builder
-    public MemberSaveRequest(String name, String email, String password) {
+    public SignUpRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public Member toEntity() {
-        return Member.builder()
+    public User toEntity() {
+        return User.builder()
                 .name(name)
                 .email(email)
                 .password(password)

@@ -1,7 +1,7 @@
 package com.example.board.service;
 
-import com.example.board.repository.MemberRepository;
-import com.example.board.request.MemberSaveRequest;
+import com.example.board.repository.UserRepository;
+import com.example.board.request.SignUpRequest;
 import com.example.board.request.SignInRequest;
 import com.example.board.response.SignInResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -13,26 +13,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class MemberServiceTest {
+class UserServiceTest {
 
     @Autowired
-    private MemberService memberService;
+    private UserService userService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("회원가입을 할 수 있다.")
     void register() {
         // given
-        MemberSaveRequest request = MemberSaveRequest.builder()
+        SignUpRequest request = SignUpRequest.builder()
                 .name("이름")
                 .email("abc@naver.com")
                 .password("1234")
                 .build();
 
         // when
-        Long id = memberService.register(request);
+        Long id = userService.signUp(request);
 
         // then
         assertThat(id).isEqualTo(1L);
@@ -42,12 +42,12 @@ class MemberServiceTest {
     @DisplayName("로그인을 할 수 있다.")
     void signIn() {
         // given
-        MemberSaveRequest signUp = MemberSaveRequest.builder()
+        SignUpRequest signUp = SignUpRequest.builder()
             .name("이름")
             .email("abc@naver.com")
             .password("1234")
             .build();
-        memberService.register(signUp);
+        userService.signUp(signUp);
 
         SignInRequest request = SignInRequest.builder()
             .email(signUp.getEmail())
@@ -55,7 +55,7 @@ class MemberServiceTest {
             .build();
 
         // when
-        SignInResponse response = memberService.signIn(request);
+        SignInResponse response = userService.signIn(request);
 
         // then
         assertThat(response.getMemberName()).isEqualTo(signUp.getName());

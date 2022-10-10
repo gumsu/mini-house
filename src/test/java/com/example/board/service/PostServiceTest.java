@@ -1,27 +1,9 @@
 package com.example.board.service;
 
-import com.example.board.domain.post.Post;
-import com.example.board.exception.PostNotFound;
 import com.example.board.repository.PostRepository;
-import com.example.board.request.PostSaveRequest;
-import com.example.board.request.PostSearchRequest;
-import com.example.board.request.PostUpdateRequest;
-import com.example.board.response.PostResponse;
-import com.example.board.service.PostService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

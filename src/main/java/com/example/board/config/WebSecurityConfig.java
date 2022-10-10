@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests() // 요청에 대한 사용권한 체크
             .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/v1/member/**").hasRole("MEMBER")
+            .antMatchers(HttpMethod.POST, "/api/v1/user/**").hasRole("USER")
             .anyRequest().permitAll()
             .and()
             .addFilterBefore(new JWTAuthenticationFilter(jwtTokenProvider),

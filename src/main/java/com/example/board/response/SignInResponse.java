@@ -1,6 +1,6 @@
 package com.example.board.response;
 
-import com.example.board.domain.member.Member;
+import com.example.board.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +12,7 @@ public class SignInResponse {
     private String memberName;
     private String memberEmail;
 
-    public SignInResponse(Member entity, String token) {
+    public SignInResponse(User entity, String token) {
         this.token = token;
         this.refreshToken = null;
         this.memberName = entity.getName();

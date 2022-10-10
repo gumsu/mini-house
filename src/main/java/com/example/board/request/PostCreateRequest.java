@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PostSaveRequest {
+public class PostCreateRequest {
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
@@ -20,7 +20,7 @@ public class PostSaveRequest {
     private String writer;
 
     @Builder
-    public PostSaveRequest(String title, String content, String writer) {
+    public PostCreateRequest(String title, String content, String writer) {
         this.title = title;
         this.content = content;
         this.writer = writer;
