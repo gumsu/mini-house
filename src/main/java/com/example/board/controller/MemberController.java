@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/v1/member")
+@RequestMapping("/api/v1/member")
 @RestController
 public class MemberController {
     private final MemberService memberService;

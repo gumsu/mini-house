@@ -1,17 +1,16 @@
 package com.example.board.service;
 
-import com.example.board.domain.member.Member;
 import com.example.board.repository.MemberRepository;
 import com.example.board.request.MemberSaveRequest;
-import org.assertj.core.api.Assertions;
+import com.example.board.request.SignInRequest;
+import com.example.board.response.SignInResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -36,6 +35,29 @@ class MemberServiceTest {
         Long id = memberService.register(request);
 
         // then
-        Assertions.assertThat(id).isEqualTo(1L);
+        assertThat(id).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("로그인을 할 수 있다.")
+    void signIn() {
+        // given
+        MemberSaveRequest signUp = MemberSaveRequest.builder()
+            .name("이름")
+            .email("abc@naver.com")
+            .password("1234")
+            .build();
+        memberService.register(signUp);
+
+        SignInRequest request = SignInRequest.builder()
+            .email(signUp.getEmail())
+            .password(signUp.getPassword())
+            .build();
+
+        // when
+        SignInResponse response = memberService.signIn(request);
+
+        // then
+        assertThat(response.getMemberName()).isEqualTo(signUp.getName());
     }
 }

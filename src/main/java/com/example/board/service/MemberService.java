@@ -23,7 +23,7 @@ public class MemberService {
     public SignInResponse signIn(SignInRequest request) {
         Member member = memberRepository.findByEmail(request.getEmail().toLowerCase())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 email 입니다."));
-        String token = jwtTokenProvider.generateToken(request.getEmail());
+        String token = jwtTokenProvider.generateToken(member.getUsername(), member.getRoles());
         return new SignInResponse(member, token);
     }
 }
