@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class JWTUtil {
+public class JWTTokenProvider {
 
     private static final long EXPIRE_TIME = 60 * 60 * 2 * 1000L; // 2시간
     private static final String SECRET_KEY = "member-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
