@@ -21,7 +21,6 @@ public class JWTTokenProvider {
     private static final String secretKey = "member-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     private static final Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     private static final String HEADER_STRING = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
 
     private String createToken(Claims claims) {
         return Jwts.builder()
