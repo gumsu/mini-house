@@ -1,5 +1,10 @@
 package com.example.board.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.example.board.request.SignInRequest;
 import com.example.board.request.SignUpRequest;
 import com.example.board.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,10 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,8 +30,8 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("/member 를 post로 요청 시 회원가입 할 수 있다.")
-    void save() throws Exception {
+    @DisplayName("/signup 를 요청 시 회원가입 할 수 있다.")
+    void signup() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .name("이름")
@@ -39,7 +40,30 @@ class UserControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/api/v1/member")
+        mockMvc.perform(post("/api/v1/user/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/signin 을 요청 시 로그인을 할 수 있다.")
+    void signin() throws Exception {
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+            .name("이름")
+            .email("abcd@naver.com")
+            .password("1234")
+            .build();
+
+        userService.signUp(signUpRequest);
+        SignInRequest request = SignInRequest.builder()
+            .email("abcd@naver.com")
+            .password("1234")
+            .build();
+
+        mockMvc.perform(post("/api/v1/user/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

@@ -1,6 +1,7 @@
 package com.example.board.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -75,7 +76,22 @@ class UserServiceTest {
 
         // then
         assertThat(response.getToken()).isEqualTo("123");
-        assertThat(response.getMemberName()).isEqualTo(user.getName());
+        assertThat(response.getUserName()).isEqualTo(user.getName());
+    }
+
+    @Test
+    @DisplayName("가입되지 않은 이메일로 로그인을 할 수 없다.")
+    void wrongEmail() {
+        // given
+        SignInRequest request = SignInRequest.builder()
+            .email("test@test.com")
+            .password("1234")
+            .build();
+
+        given(userRepository.findByEmail(any())).willThrow(IllegalArgumentException.class);
+
+        assertThatThrownBy(() -> userService.signIn(request))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     private User createUserEntity(SignUpRequest request) {

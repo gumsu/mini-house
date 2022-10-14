@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class SignInResponse {
     private String token;
     private String refreshToken;
-    private String memberName;
-    private String memberEmail;
+    private String userName;
+    private String userEmail;
 
     public SignInResponse(User entity, String token) {
         this.token = token;
         this.refreshToken = null;
-        this.memberName = entity.getName();
-        this.memberEmail = entity.getEmail();
+        this.userName = entity.getName();
+        this.userEmail = entity.getEmail();
     }
 }
