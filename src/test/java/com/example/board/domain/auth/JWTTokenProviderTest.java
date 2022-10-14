@@ -1,9 +1,7 @@
 package com.example.board.domain.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.Test;
 
 class JWTTokenProviderTest {
@@ -33,8 +31,8 @@ class JWTTokenProviderTest {
     @Test
     void 만료된_토큰은_에러() {
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjY1NzMzNjYxLCJleHAiOjE2NjU3NDA4NjF9.ry3HrnthQAin_A_vfAV6SR0QSHpCRRX7SrL8SYYQVwU";
-        assertThatThrownBy(() -> jwtTokenProvider.validateToken(token))
-            .isInstanceOf(ExpiredJwtException.class);
+        boolean validateToken = jwtTokenProvider.validateToken(token);
+        assertThat(validateToken).isFalse();
     }
 
     @Test

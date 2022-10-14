@@ -25,12 +25,12 @@ public class JWTTokenProvider {
 
     private String createToken(Claims claims) {
         return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+            .setClaims(claims)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
     }
 
     public String generateToken(String userPk, String role) {
