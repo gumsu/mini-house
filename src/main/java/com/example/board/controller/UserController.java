@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +34,12 @@ public class UserController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTTokenProvider.HEADER_STRING,response.getToken());
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/signout")
+    public ResponseEntity<HttpStatus> signOut() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTTokenProvider.HEADER_STRING, "");
+        return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.OK);
     }
 }
