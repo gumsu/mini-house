@@ -69,7 +69,7 @@ class UserServiceTest {
 
         // mocking
         given(userRepository.findByEmail(any())).willReturn(Optional.ofNullable(user));
-        given(jwtTokenProvider.generateToken(any(),any())).willReturn("123");
+        given(jwtTokenProvider.generateToken(any(), any())).willReturn("123");
 
         // when
         SignInResponse response = userService.signIn(request);
@@ -102,6 +102,7 @@ class UserServiceTest {
             .password(request.getPassword())
             .build();
     }
+
     private SignUpRequest signUpRequest() {
         return SignUpRequest.builder()
             .email("test@test.com")

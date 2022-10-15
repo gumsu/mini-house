@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 @RestController
 public class UserController {
+
     private final UserService userService;
 
     @PostMapping("/signup")
@@ -32,7 +33,7 @@ public class UserController {
     public ResponseEntity<HttpStatus> signIn(@RequestBody SignInRequest signInRequest) {
         SignInResponse response = userService.signIn(signInRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTTokenProvider.HEADER_STRING,response.getToken());
+        httpHeaders.add(JWTTokenProvider.HEADER_STRING, response.getToken());
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.ACCEPTED);
     }
 

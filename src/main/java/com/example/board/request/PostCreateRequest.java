@@ -28,16 +28,16 @@ public class PostCreateRequest {
 
     public Post toEntity() {
         return Post.builder()
-                .title(title)
-                .content(content)
-                .writer(writer)
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(null)
-                .build();
+            .title(title)
+            .content(content)
+            .writer(writer)
+            .createdDate(LocalDateTime.now())
+            .modifiedDate(null)
+            .build();
     }
 
     public void validate() {
-        if(title.contains("바보")){
+        if (title.contains("바보")) {
             throw new InvalidRequest("title", "제목에 바보를 포함할 수 없습니다.");
         }
     }

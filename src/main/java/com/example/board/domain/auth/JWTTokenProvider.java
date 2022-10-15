@@ -18,7 +18,8 @@ public class JWTTokenProvider {
 
     private static final long EXPIRE_TIME = 60 * 60 * 2 * 1000L; // 2시간
     private static final String SECRET_KEY = "member-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    private static final Key ENCODED_SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    private static final Key ENCODED_SECRET_KEY = Keys
+        .hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     public static final String HEADER_STRING = "ACCESS_TOKEN";
 
     private String createToken(Claims claims) {

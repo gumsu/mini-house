@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SignInResponse {
+
     private String token;
     private String refreshToken;
     private String userName;

@@ -22,7 +22,7 @@ public class UserService {
 
     public SignInResponse signIn(SignInRequest request) {
         User user = userRepository.findByEmail(request.getEmail().toLowerCase())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 email 입니다."));
+            .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 email 입니다."));
         String token = jwtTokenProvider.generateToken(user.getEmail(), user.getRole());
         return new SignInResponse(user, token);
     }

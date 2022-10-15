@@ -24,11 +24,11 @@ public class SignUpRequest {
 
     public User toEntity() {
         return User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .createdAt(LocalDateTime.now())
-                .role("USER")
-                .build();
+            .name(name)
+            .email(email)
+            .password(password)
+            .createdAt(LocalDateTime.now())
+            .role("USER")
+            .build();
     }
 }

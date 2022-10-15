@@ -34,17 +34,17 @@ class UserControllerTest {
     void signup() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
-                .name("이름")
-                .email("abcd@naver.com")
-                .password("1234")
-                .build();
+            .name("이름")
+            .email("abcd@naver.com")
+            .password("1234")
+            .build();
 
         // expected
         mockMvc.perform(post("/api/v1/user/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andDo(print());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
     @Test
@@ -64,9 +64,9 @@ class UserControllerTest {
             .build();
 
         mockMvc.perform(post("/api/v1/user/signin")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andDo(print());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 }
