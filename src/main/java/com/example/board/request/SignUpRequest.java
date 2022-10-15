@@ -28,6 +28,7 @@ public class SignUpRequest {
                 .email(email)
                 .password(password)
                 .createdAt(LocalDateTime.now())
+                .role("USER")
                 .build();
     }
 }

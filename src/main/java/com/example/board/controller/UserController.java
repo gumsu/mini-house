@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import com.example.board.domain.auth.JWTTokenProvider;
 import com.example.board.request.SignInRequest;
 import com.example.board.request.SignUpRequest;
 import com.example.board.response.SignInResponse;
@@ -30,7 +31,7 @@ public class UserController {
     public ResponseEntity<HttpStatus> signIn(@RequestBody SignInRequest signInRequest) {
         SignInResponse response = userService.signIn(signInRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization",response.getToken());
+        httpHeaders.add(JWTTokenProvider.HEADER_STRING,response.getToken());
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.ACCEPTED);
     }
 }
