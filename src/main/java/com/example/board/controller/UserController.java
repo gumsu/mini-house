@@ -24,12 +24,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public Long signUp(@RequestBody SignUpRequest signUpRequest) {
         return userService.signUp(signUpRequest);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     public ResponseEntity<HttpStatus> signIn(@RequestBody SignInRequest signInRequest) {
         SignInResponse response = userService.signIn(signInRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/signout")
+    @GetMapping("/sign-out")
     public ResponseEntity<HttpStatus> signOut() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTTokenProvider.HEADER_STRING, "");
