@@ -16,7 +16,7 @@ public class JWTSignInInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String headerToken = request.getHeader(JWTTokenProvider.HEADER_STRING);
+        String headerToken = request.getHeader(JWTTokenProvider.ACCESS_TOKEN);
 
         if (headerToken == null || headerToken.equals("") || !jwtTokenProvider.validateToken(headerToken)) {
             throw new RuntimeException("인증 토큰이 유효하지 않습니다.");

@@ -32,14 +32,14 @@ public class UserController {
     public ResponseEntity<HttpStatus> signIn(@RequestBody SignInRequest signInRequest) {
         String token = userService.signIn(signInRequest).getToken();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTTokenProvider.HEADER_STRING, token);
+        httpHeaders.add(JWTTokenProvider.ACCESS_TOKEN, token);
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.OK);
     }
 
     @GetMapping("/sign-out")
     public ResponseEntity<HttpStatus> signOut() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTTokenProvider.HEADER_STRING, "");
+        httpHeaders.add(JWTTokenProvider.ACCESS_TOKEN, "");
         return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.OK);
     }
 }

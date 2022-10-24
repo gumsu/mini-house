@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class JWTTokenProvider implements InitializingBean {
 
     private static final long EXPIRE_TIME = 60 * 60 * 2 * 1000L; // 2시간
-    public static final String HEADER_STRING = "ACCESS_TOKEN";
+    public static final String ACCESS_TOKEN = "ACCESS-TOKEN";
 
     @Value("${jwt.secret-key}")
     private String secretKey;
