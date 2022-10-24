@@ -22,11 +22,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTTokenProvider implements InitializingBean {
 
-    private static final long EXPIRE_TIME = 60 * 60 * 2 * 1000L; // 2시간
     public static final String ACCESS_TOKEN = "ACCESS-TOKEN";
+
+    @Value("${jwt.expire-time}")
+    private long expireTime;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
+
     private Key encodedSecretKet;
 
     @Override
@@ -39,7 +42,7 @@ public class JWTTokenProvider implements InitializingBean {
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
+            .setExpiration(new Date(System.currentTimeMillis() + expireTime))
             .signWith(encodedSecretKet, SignatureAlgorithm.HS256)
             .compact();
     }
