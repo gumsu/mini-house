@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.example.board.exception.InvalidToken;
+import java.lang.reflect.Field;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,14 +38,19 @@ class JWTTokenProviderTest {
     void 잘못된_토큰은_에러() {
         String wrongToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         assertThatThrownBy(() -> jwtTokenProvider.validateToken(wrongToken))
-            .isInstanceOf(InvalidToken.class);
+            .isInstanceOf(InvalidToken.class).hasMessageContaining("유효하지 않은 구성의 토큰입니다.");
     }
 
     @Test
-    void 만료된_토큰은_에러() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjY1NzMzNjYxLCJleHAiOjE2NjU3NDA4NjF9.ry3HrnthQAin_A_vfAV6SR0QSHpCRRX7SrL8SYYQVwU";
+    void 만료된_토큰은_에러() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        Class JWTTokenProviderClass = Class.forName("com.example.board.domain.auth.JWTTokenProvider");
+        Field field = JWTTokenProviderClass.getDeclaredField("expireTime");
+        field.setAccessible(true);
+        field.set(jwtTokenProvider, 0);
+
+        String token = jwtTokenProvider.generateToken("username", "USER");
         assertThatThrownBy(() -> jwtTokenProvider.validateToken(token))
-            .isInstanceOf(InvalidToken.class);
+            .isInstanceOf(InvalidToken.class).hasMessageContaining("기한이 만료된 토큰입니다.");
     }
 
     @Test
