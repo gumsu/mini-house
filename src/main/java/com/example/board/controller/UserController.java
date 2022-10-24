@@ -3,7 +3,6 @@ package com.example.board.controller;
 import com.example.board.domain.auth.JWTTokenProvider;
 import com.example.board.request.SignInRequest;
 import com.example.board.request.SignUpRequest;
-import com.example.board.response.SignInResponse;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +30,10 @@ public class UserController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<HttpStatus> signIn(@RequestBody SignInRequest signInRequest) {
-        SignInResponse response = userService.signIn(signInRequest);
+        String token = userService.signIn(signInRequest).getToken();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTTokenProvider.HEADER_STRING, response.getToken());
-        return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.ACCEPTED);
+        httpHeaders.add(JWTTokenProvider.HEADER_STRING, token);
+        return ResponseEntity.ok().headers(httpHeaders).body(HttpStatus.OK);
     }
 
     @GetMapping("/sign-out")
