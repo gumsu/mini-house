@@ -10,17 +10,25 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class JWTTokenProvider {
+public class JWTTokenProvider implements InitializingBean {
 
     private static final long EXPIRE_TIME = 60 * 60 * 2 * 1000L; // 2시간
-    private static final String SECRET_KEY = "member-secret-key-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    private static final Key ENCODED_SECRET_KEY = Keys
-        .hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     public static final String HEADER_STRING = "ACCESS_TOKEN";
+
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+    private Key encodedSecretKet;
+
+    @Override
+    public void afterPropertiesSet() {
+        this.encodedSecretKet = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
 
     private String createToken(Claims claims) {
         return Jwts.builder()
@@ -28,7 +36,7 @@ public class JWTTokenProvider {
             .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
-            .signWith(ENCODED_SECRET_KEY, SignatureAlgorithm.HS256)
+            .signWith(encodedSecretKet, SignatureAlgorithm.HS256)
             .compact();
     }
 
@@ -40,7 +48,7 @@ public class JWTTokenProvider {
 
     public String getUserPk(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(ENCODED_SECRET_KEY)
+            .setSigningKey(encodedSecretKet)
             .build()
             .parseClaimsJws(token)
             .getBody()
@@ -50,7 +58,7 @@ public class JWTTokenProvider {
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(ENCODED_SECRET_KEY)
+                .setSigningKey(encodedSecretKet)
                 .build()
                 .parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
