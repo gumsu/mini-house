@@ -40,7 +40,7 @@ class UserControllerTest {
             .build();
 
         // expected
-        mockMvc.perform(post("/api/v1/user/signup")
+        mockMvc.perform(post("/api/v1/user/sign-up")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
@@ -63,7 +63,7 @@ class UserControllerTest {
             .password("1234")
             .build();
 
-        mockMvc.perform(post("/api/v1/user/signin")
+        mockMvc.perform(post("/api/v1/user/sign-in")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
