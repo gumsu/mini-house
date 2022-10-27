@@ -7,28 +7,31 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Table(name = "Posts")
+@Table(name = "posts")
 @Getter
 @NoArgsConstructor
 @Entity
 public class Post {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String content;
-    private String writer;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private Long views;
+    private Integer likes;
 
     @Builder
-    public Post(String title, String content, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Post(String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, Long views, Integer likes) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.views = views;
+        this.likes = likes;
     }
 
     // 기존 데이터로 build
@@ -42,6 +45,6 @@ public class Post {
     public void toEdit(PostEditor postEditor) {
         title = postEditor.getTitle();
         content = postEditor.getContent();
-        modifiedDate = LocalDateTime.now();
+        modifiedAt = LocalDateTime.now();
     }
 }

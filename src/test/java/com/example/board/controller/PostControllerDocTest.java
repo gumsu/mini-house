@@ -1,5 +1,10 @@
 package com.example.board.controller;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +20,6 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,7 +45,6 @@ public class PostControllerDocTest {
         PostCreateRequest request = PostCreateRequest.builder()
                 .title("제목입니다.")
                 .content("내용입니다")
-                .writer("작성자입니다")
                 .build();
         postRepository.save(request.toEntity());
 

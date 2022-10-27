@@ -1,9 +1,12 @@
-CREATE TABLE USERS
+CREATE TABLE `users`
 (
-    id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name      varchar(255)  not null,
-    email     varchar(1000) not null,
-    password  varchar(10)   not null,
-    createdAt datetime      not null,
-    role      varchar(255)  not null
-)
+    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name`        VARCHAR(100) NOT NULL,
+    `nickname`    VARCHAR(100) NOT NULL,
+    `email`       VARCHAR(100) NOT NULL,
+    `password`    VARCHAR(255) NOT NULL,
+    `phone`       VARCHAR(100) NULL, -- 임시
+    `created_at`  DATETIME     NOT NULL,
+    `modified_at` DATETIME     NULL,
+    `role_id`     INT UNSIGNED NULL -- 임시
+);

@@ -50,7 +50,6 @@ class PostControllerTest {
 //        PostSaveRequest request = PostSaveRequest.builder()
 //                .title("제목입니다.")
 //                .content("내용입니다")
-//                .writer("작성자입니다")
 //                .build();
 //
 ////        when(postService.register(Mockito.any())).thenReturn(Long.valueOf(1));
@@ -77,7 +76,6 @@ class PostControllerTest {
 //                    return Post.builder()
 //                            .title("제목 " + i)
 //                            .content("내용 " + i)
-//                            .writer("작성자 "+ i)
 //                            .build(  );
 //                })
 //                .collect(Collectors.toList());
@@ -101,7 +99,6 @@ class PostControllerTest {
 //        PostSaveRequest request = PostSaveRequest.builder()
 //                .title("제목입니다.")
 //                .content("내용입니다")
-//                .writer("작성자입니다")
 //                .build();
 //
 //        Post post = postRepository.save(request.toEntity());
@@ -125,7 +122,6 @@ class PostControllerTest {
 //        PostSaveRequest data = PostSaveRequest.builder()
 //                .title("제목입니다.")
 //                .content("내용입니다")
-//                .writer("작성자입니다")
 //                .build();
 //
 //        Post post = postRepository.save(data.toEntity());
@@ -134,7 +130,6 @@ class PostControllerTest {
 //        PostUpdateRequest request = PostUpdateRequest.builder()
 //                .title("변경한 제목")
 //                .content("변경한 내용")
-//                .writer("작성자") // 작성자입니다
 //                .build();
 //
 //        // then
@@ -157,7 +152,6 @@ class PostControllerTest {
 //        PostSaveRequest request = PostSaveRequest.builder()
 //                .title("")
 //                .content("내용입니다")
-//                .writer("작성자입니다")
 //                .build();
 //
 //        // expected
@@ -183,7 +177,6 @@ class PostControllerTest {
 //                    return Post.builder()
 //                            .title("제목 " + i)
 //                            .content("내용 " + i)
-//                            .writer("작성자 "+ i)
 //                            .build(  );
 //                })
 //                .collect(Collectors.toList());
@@ -207,7 +200,6 @@ class PostControllerTest {
 //        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
 //                .title("게시글제목")
 //                .content("내용임")
-//                .writer("작성자1")
 //                .build();
 //
 //        Post post = postRepository.save(postSaveRequest.toEntity());
@@ -238,7 +230,6 @@ class PostControllerTest {
 //        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
 //                .title("바보")
 //                .content("내용")
-//                .writer("작성자")
 //                .build();
 //
 //        mockMvc.perform(post("/api/v1/post")

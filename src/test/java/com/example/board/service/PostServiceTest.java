@@ -5,10 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @SpringBootTest
 class PostServiceTest {
 
@@ -30,7 +26,6 @@ class PostServiceTest {
 //        PostSaveRequest request = PostSaveRequest.builder()
 //                .title("제목입니다")
 //                .content("내용입니다")
-//                .writer("작성자1")
 //                .build();
 //
 //        // when
@@ -50,7 +45,6 @@ class PostServiceTest {
 //                    return Post.builder()
 //                            .title("제목 " + i)
 //                            .content("내용 " + i)
-//                            .writer("작성자 "+ i)
 //                            .build(  );
 //                })
 //                .collect(Collectors.toList());
@@ -77,7 +71,6 @@ class PostServiceTest {
 //                    return Post.builder()
 //                            .title("제목 " + i)
 //                            .content("내용 " + i)
-//                            .writer("작성자 "+ i)
 //                            .build(  );
 //                })
 //                .collect(Collectors.toList());
@@ -97,7 +90,6 @@ class PostServiceTest {
 //        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
 //                .title("제목입니다")
 //                .content("내용입니다")
-//                .writer("작성자1")
 //                .build();
 //
 //        Post post = postRepository.save(postSaveRequest.toEntity());
@@ -105,7 +97,6 @@ class PostServiceTest {
 //        PostUpdateRequest postUpdateRequest = PostUpdateRequest.builder()
 //                .title("바꾼 제목이에요")
 //                .content("내용입니다")
-//                .writer("작성자1")
 //                .build();
 //        // when
 //        postService.update(post.getId(), postUpdateRequest);
@@ -123,7 +114,6 @@ class PostServiceTest {
 //        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
 //                .title("제목이에요")
 //                .content("내용이에요")
-//                .writer("작성자2")
 //                .build();
 //        Post post = postRepository.save(postSaveRequest.toEntity());
 //
@@ -141,7 +131,6 @@ class PostServiceTest {
 //        PostSaveRequest postSaveRequest = PostSaveRequest.builder()
 //                .title("제목이에요")
 //                .content("내용이에요")
-//                .writer("작성자1")
 //                .build();
 //
 //        Post post = postRepository.save(postSaveRequest.toEntity());

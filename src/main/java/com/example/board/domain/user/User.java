@@ -21,18 +21,24 @@ public class User {
     private Long id;
 
     private String name;
+    private String nickName;
     private String email;
     private String password;
+    private String phone;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     private String role;
 
     @Builder
-    public User(Long id, String name, String email, String password, LocalDateTime createdAt, String role) {
+    public User(Long id, String name, String nickName, String email, String password, String phone, LocalDateTime createdAt, LocalDateTime modifiedAt, String role) {
         this.id = id;
         this.name = name;
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
+        this.phone = phone;
         this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
         this.role = role;
     }
 }

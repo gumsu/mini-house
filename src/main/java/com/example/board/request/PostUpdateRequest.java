@@ -14,13 +14,10 @@ public class PostUpdateRequest {
     private String title;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @NotBlank(message = "작성자를 입력해주세요.")
-    private String writer;
 
     @Builder
-    public PostUpdateRequest(String title, String content, String writer) {
+    public PostUpdateRequest(String title, String content) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
     }
 }
