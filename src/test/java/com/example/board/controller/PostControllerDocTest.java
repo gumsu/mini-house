@@ -1,7 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.repository.PostRepository;
-import com.example.board.request.PostSaveRequest;
+import com.example.board.request.PostCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -43,7 +42,7 @@ public class PostControllerDocTest {
     @DisplayName("테스트")
     void test() throws Exception {
         // given
-        PostSaveRequest request = PostSaveRequest.builder()
+        PostCreateRequest request = PostCreateRequest.builder()
                 .title("제목입니다.")
                 .content("내용입니다")
                 .writer("작성자입니다")

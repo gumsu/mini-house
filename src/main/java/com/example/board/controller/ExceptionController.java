@@ -1,10 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.exception.BaseException;
-import com.example.board.exception.InvalidRequest;
-import com.example.board.exception.PostNotFound;
 import com.example.board.response.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Slf4j
 @ControllerAdvice
 public class ExceptionController {
 
