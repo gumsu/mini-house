@@ -1,11 +1,13 @@
-CREATE TABLE POSTS(
-                      id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                      title varchar(255) not null,
-                      content varchar(1000) not null,
-                      writer varchar(10) not null,
-                      createdDate datetime not null,
-                      modifiedDate datetime null,
-                      memberId INT null, -- 임시 null
-                      FOREIGN KEY (memberId)
-                      REFERENCES MEMBERS(id) on update cascade
-)
+CREATE TABLE `posts`
+(
+    `post_id`     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `title`       VARCHAR(100)  NOT NULL,
+    `content`     VARCHAR(1000) NOT NULL,
+    `created_at`  DATETIME      NOT NULL,
+    `modified_at` DATETIME NULL,
+    `views`       BIGINT UNSIGNED NULL,
+    `likes`       INT UNSIGNED NULL,
+    `user_id`     BIGINT UNSIGNED NOT NULL
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+);

@@ -27,7 +27,10 @@ public class SignUpRequest {
             .name(name)
             .email(email)
             .password(password)
+            .nickName(name)
+            .phone(null)
             .createdAt(LocalDateTime.now())
+            .modifiedAt(null)
             .role("USER")
             .build();
     }

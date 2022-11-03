@@ -1,11 +1,14 @@
 package com.example.board.request;
 
 import com.example.board.domain.post.Post;
+import com.example.board.domain.user.User;
 import com.example.board.exception.InvalidRequest;
-import lombok.*;
-
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -16,23 +19,22 @@ public class PostCreateRequest {
     private String title;
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
-    @NotBlank(message = "작성자를 입력해주세요.")
-    private String writer;
 
     @Builder
-    public PostCreateRequest(String title, String content, String writer) {
+    public PostCreateRequest(String title, String content) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
     }
 
-    public Post toEntity() {
+    public Post toEntity(User user) {
         return Post.builder()
             .title(title)
             .content(content)
-            .writer(writer)
-            .createdDate(LocalDateTime.now())
-            .modifiedDate(null)
+            .createdAt(LocalDateTime.now())
+            .modifiedAt(null)
+            .views(0L)
+            .likes(0)
+            .user(user)
             .build();
     }
 
