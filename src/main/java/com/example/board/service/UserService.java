@@ -2,6 +2,7 @@ package com.example.board.service;
 
 import com.example.board.domain.auth.JWTTokenProvider;
 import com.example.board.domain.user.User;
+import com.example.board.exception.UserNotFound;
 import com.example.board.repository.UserRepository;
 import com.example.board.request.SignInRequest;
 import com.example.board.request.SignUpRequest;
@@ -29,13 +30,13 @@ public class UserService {
 
     public User findOneById(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+            .orElseThrow(UserNotFound::new);
         return user;
     }
 
     public User findOneByEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+            .orElseThrow(UserNotFound::new);
         return user;
     }
 }
