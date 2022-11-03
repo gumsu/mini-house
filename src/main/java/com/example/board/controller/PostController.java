@@ -22,9 +22,9 @@ public class PostController {
 
     // 등록
     @PostMapping("/post")
-    public Long create(@RequestBody @Valid PostCreateRequest postCreateRequest) {
+    public Long create(@RequestBody @Valid PostCreateRequest postCreateRequest, @RequestHeader(value = "ACCESS-TOKEN") String accessToken) {
         postCreateRequest.validate();
-        return postService.create(postCreateRequest);
+        return postService.create(postCreateRequest, accessToken);
     }
 
     // 전체 조회
@@ -41,13 +41,13 @@ public class PostController {
 
     // 수정
     @PatchMapping("/{id}")
-    public Long update(@PathVariable Long id, @RequestBody @Valid PostUpdateRequest postUpdateRequest) {
-        return postService.update(id, postUpdateRequest);
+    public Long update(@PathVariable Long id, @RequestBody @Valid PostUpdateRequest postUpdateRequest, @RequestHeader(value = "ACCESS-TOKEN") String accessToken) {
+        return postService.update(id, postUpdateRequest, accessToken);
     }
 
     // 삭제
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        postService.delete(id);
+    public void delete(@PathVariable Long id, @RequestHeader(value = "ACCESS-TOKEN") String accessToken ) {
+        postService.delete(id, accessToken);
     }
 }

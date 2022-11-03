@@ -5,8 +5,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.board.domain.user.User;
 import com.example.board.repository.PostRepository;
 import com.example.board.request.PostCreateRequest;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,11 +44,18 @@ public class PostControllerDocTest {
     @DisplayName("테스트")
     void test() throws Exception {
         // given
+        User user = User.builder()
+            .id(1L)
+            .name("이름")
+            .email("test@test.com")
+            .password("1234")
+            .createdAt(LocalDateTime.now())
+            .build();
         PostCreateRequest request = PostCreateRequest.builder()
                 .title("제목입니다.")
                 .content("내용입니다")
                 .build();
-        postRepository.save(request.toEntity());
+        postRepository.save(request.toEntity(user));
 
         // expected
         this.mockMvc.perform(get("/api/v1/1").accept(MediaType.APPLICATION_JSON))
