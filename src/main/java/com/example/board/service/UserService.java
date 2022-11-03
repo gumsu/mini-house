@@ -29,14 +29,12 @@ public class UserService {
     }
 
     public User findOneById(Long userId) {
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
             .orElseThrow(UserNotFound::new);
-        return user;
     }
 
     public User findOneByEmail(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        return userRepository.findByEmail(userEmail)
             .orElseThrow(UserNotFound::new);
-        return user;
     }
 }
