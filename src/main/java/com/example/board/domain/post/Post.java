@@ -1,11 +1,19 @@
 package com.example.board.domain.post;
 
+import com.example.board.domain.user.User;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Table(name = "posts")
 @Getter
@@ -15,6 +23,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
 
     private String title;
@@ -24,14 +33,19 @@ public class Post {
     private Long views;
     private Integer likes;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Builder
-    public Post(String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, Long views, Integer likes) {
+    public Post(String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, Long views, Integer likes, User user) {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.views = views;
         this.likes = likes;
+        this.user = user;
     }
 
     // 기존 데이터로 build
